@@ -346,8 +346,7 @@ int hintPrint(NumberBB nbb);
 
 extern "C" JNIEXPORT jstring JNICALL
 
-
-Java_com_weakness_numberbaseball_MainActivity_main(JNIEnv* env,jobject /* this */)
+Java_com_weakness_numberbaseball_PlayballActivity_main(JNIEnv* env,jobject /* this */)
 {
     return env->NewStringUTF("이렇게 하는건가??");
 }
@@ -357,6 +356,7 @@ int main(int argc, char* argv[])
 {
     NumberBB nbb = { 0, };
 
+    printf("여기 오니???");
     dataInit(&nbb);
     playBall(&nbb);
 
@@ -651,3 +651,4 @@ int hintPrint(NumberBB nbb)
 
     return 0;
 }
+
