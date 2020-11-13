@@ -16,45 +16,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="number"
-            android:hint="3자리 숫자를 입력하세요"
+            android:hint="중복되지 않는 3자리 숫자를 입력하세요."
             android:gravity="center"
+            android:maxLength="3"
             android:id="@+id/playball_et_inputNum"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:gravity="center"
-            android:inputType="number"
-            android:hint="ball"
-            android:id="@+id/playball_et_inputBall"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:gravity="center"
-            android:text="Strike"/>
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:gravity="center"
-            android:inputType="number"
-            android:hint="strike"
-            android:id="@+id/playball_et_inputStrike"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:gravity="center"
-            android:text="ball"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
         <Button
             android:layout_width="wrap_content"
@@ -66,7 +35,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="확인"
-            android:id="@+id/playball_btn_checkBtn">
+            android:id="@+id/playball_btn_submitBtn">
         </Button>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="Strike : "
+            android:id="@+id/playball_tv_resStrike"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="ball : "
+            android:id="@+id/playball_tv_resBall"/>
     </LinearLayout>
 </androidx.appcompat.widget.LinearLayoutCompat>

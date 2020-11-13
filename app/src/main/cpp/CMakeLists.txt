@@ -15,7 +15,7 @@ project("numberbaseball")
 # Gradle automatically packages shared libraries with your APK.
 
 add_library( # Sets the name of the library.
-             native-lib
+             numberBaseball-lib # 라이브러리 이름을 정하는거인듯.. 나중에 cpp파일에서 loadlibrary할때 이 이름을 써야되는듯..
 
              # Sets the library as a shared library.
              SHARED
@@ -44,8 +44,7 @@ find_library( # Sets the name of the path variable.
 # build script, prebuilt third-party libraries, or system libraries.
 
 target_link_libraries( # Specifies the target library.
-                       native-lib
-
+                        numberBaseball-lib
 
                        # Links the target library to the log library
                        # included in the NDK.
