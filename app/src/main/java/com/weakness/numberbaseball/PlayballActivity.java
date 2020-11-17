@@ -1,15 +1,22 @@
 package com.weakness.numberbaseball;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.Random;
 
 public class PlayballActivity extends AppCompatActivity {
     Intent playball_resultIntent;
@@ -18,14 +25,14 @@ public class PlayballActivity extends AppCompatActivity {
     EditText playball_inputNum;
     TextView playball_resStrike;
     TextView playball_resBall;
+    TableLayout playball_tableLayout;
+
     public int inputNum;
-    public int inputStrike;
-    public int inputBall;
-    public int[] res;
+    public int[] inputRes;
+    public int[] hintRes;
     public int firstNum;
     public int secondNum;
     public int thirdNum;
-    public int callCnt;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -35,22 +42,34 @@ public class PlayballActivity extends AppCompatActivity {
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    public native int main(int inputNum,int firstNum, int secondNum, int thirdNum);
-    public native static void dataInit();
+    public native static int dataInit();
+    public native int[] playball(int firstNum, int secondNum, int thirdNum);
+    public native int[] hint(int firstNum, int secondNum, int thirdNum, int strike, int ball);
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playball);
+        int test;
+        Random random = new Random();
+        random.setSeed(System.currentTimeMillis());
 
-        res = new int[2];
+        test = dataInit();
+        Log.i("확인용","이거 데이터 오니? : " + test);
+        inputRes = new int[2];
+        hintRes = new int[999];
 
         playball_inputNum = findViewById(R.id.playball_et_inputNum);
+
+        playball_resStrike = findViewById(R.id.playball_tv_resStrike);
+        playball_resBall = findViewById(R.id.playball_tv_resBall);
+        playball_tableLayout = findViewById(R.id.playball_tableL_hintTableL);
 
         playball_submitBtn = findViewById(R.id.playball_btn_submitBtn);
         playball_submitBtn.setOnClickListener(new View.OnClickListener(){
 
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
 
@@ -58,15 +77,54 @@ public class PlayballActivity extends AppCompatActivity {
                 firstNum = inputNum / 100;
                 secondNum = inputNum % 100 / 10;
                 thirdNum = inputNum % 100 % 10;
+
                 if(firstNum == secondNum || secondNum == thirdNum || firstNum == thirdNum)
                 {
                     Toast.makeText(PlayballActivity.this,"중복된 숫자는 입력할 수 없습니다.",Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    res = main(inputNum,firstNum,secondNum,thirdNum);
-                    //Log.i("확인용","이거 데이터 오니? : " + res);
+                    inputRes = playball(firstNum,secondNum,thirdNum);
+                    //Log.i("확인용","이거 데이터 오니? : " + res[0] + "," + res[1]);
+                    playball_resStrike.setText(String.valueOf(inputRes[0]));
+                    playball_resBall.setText(String.valueOf(inputRes[1]));
 
+                    // 헬퍼
+                    playball_tableLayout.setStretchAllColumns(true); // 축소 기능으로 자식 뷰의 개수 또는 크기가 넓어져서 부모의 크기를 넘어서도 각각 자식들의 열너비를 줄여 부모의 전체 크기를 채우도록 하는 속성
+                    playball_tableLayout.setShrinkAllColumns(true); // 확장 기능으로 자식 뷰의 개수 또는 크기가 작아서 부모의 크기에 못미치더라도 각각의 자식들의 열너비를 늘여 부모의 전체 크기를 채우도록 하는 속성
+                    TableRow tableRow = new TableRow(PlayballActivity.this);
+                    tableRow.setLayoutParams(new TableRow.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                    // 여기에 c라이브러리 호출후 배열의 방갯수만큼만 포문 돌려서 화면에 뿌려주기 ㄱㄱ
+                    playball_tableLayout.removeAllViewsInLayout();
+                    hintRes = hint(firstNum,secondNum,thirdNum,Integer.parseInt(playball_resStrike.getText().toString()),Integer.parseInt(playball_resBall.getText().toString()));
+
+                    int cnt = 0;
+
+                    for(int i = 0 ; i < 999; i++)
+                    {
+                        if(hintRes[i] != -1)
+                        {
+                            TextView textView = new TextView(PlayballActivity.this);
+                            //textView.setText(String.valueOf(random.nextInt(899)+100)); // 테스트 값
+                            textView.setText(String.valueOf(hintRes[i]));
+                            textView.setGravity(Gravity.CENTER);
+                            textView.setPadding(15, 10, 15, 10);
+                            textView.setBackground(getDrawable(R.drawable.textview_background));
+                            tableRow.addView(textView);
+                            cnt++;
+                        }
+                        if(cnt % 10 == 0)
+                        {
+                            playball_tableLayout.addView(tableRow);
+                            tableRow = new TableRow(PlayballActivity.this);
+                            tableRow.setLayoutParams(new TableRow.LayoutParams(
+                                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT));
+                        }
+                    }
                 }
             }
         });
