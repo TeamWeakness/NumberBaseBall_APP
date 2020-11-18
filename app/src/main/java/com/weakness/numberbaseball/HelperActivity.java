@@ -62,7 +62,7 @@ public class HelperActivity extends AppCompatActivity {
                     textView.setText(String.valueOf(random.nextInt(899)+100)); // 테스트 값
                     textView.setGravity(Gravity.CENTER);
                     textView.setPadding(15,10,15,10);
-                    textView.setBackground(getDrawable(R.drawable.textview_background));
+                    textView.setBackground(getDrawable(R.drawable.hint_textview_background));
                     tableRow.addView(textView);
 
                 }
