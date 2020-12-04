@@ -204,6 +204,7 @@ public class PlayballActivity extends AppCompatActivity implements TextView.OnEd
 
                 playball_resStrike.setText("");
                 playball_resBall.setText("");
+                getNull = "";
                 playball_tableL_hintTableL.removeAllViewsInLayout();
                 playball_tableL_historyTableL.removeAllViewsInLayout();
                 dataInit();
